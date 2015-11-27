@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="com.czjcd.cordova.plugins.alipay" version="1.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>cordova-alipay-plugin</name>
+    <js-module name="cordova-alipay-plugin" src="www/cordova-alipay-plugin.js">
+        <clobbers target="AlipayPlugin" />
+    </js-module>
+    <platform name="ios">
+       <engines>
+            <engine name="cordova" version=">=3.8.0"/>
+        </engines>
+        <config-file target="config.xml" parent="/*">
+            <feature name="AlipayPlugin">
+                <param name="ios-package" value="AlipayPlugin"/>
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+        <config-file target="*-Info.plist" parent="CFBundleURLTypes">
+            <array>
+                <dict>
+                    <key>CFBundleURLSchemes</key>
+                    <array>
+                        <string>alipaycordova</string>
+                    </array>
+                </dict>
+            </array>
+        </config-file>
+        <config-file target="*-Info.plist" parent="LSApplicationQueriesSchemes">
+          <array>
+          		<string>alipayshare</string>
+              <string>alipayauth</string>
+              <string>alipay</string>
+              <string>safepay</string> 
+          	</array>
+        </config-file>
+        <config-file target="*-Info.plist" parent="NSAppTransportSecurity">
+          <dict>
+          		<key>NSExceptionDomains</key>
+          		<dict>
+          			<key>alipay.com</key>
+          			<dict>
+          				<key>NSIncludesSubdomains</key>
+          				<true/>
+          				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+          				<true/>
+          			</dict>
+          			<key>czjcd.com</key>
+          			<dict>
+          				<key>NSIncludesSubdomains</key>
+          				<true/>
+          				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+          				<true/>
+          			</dict>
+                <key>jtonline.cn</key>
+                <dict>
+                  <key>NSIncludesSubdomains</key>
+                  <true/>
+                  <key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+                  <true/>
+                </dict>
+          		</dict>
+          	</dict>
+        </config-file>
+
+
+        <source-file src="src/ios/AlipayPlugin.m" />
+        <header-file src="src/ios/AlipayPlugin.h" />
+  	 <!--
+        <hook type="after_plugin_install" src="hooks/disable-bitcode.js" />
+        <hook type="after_plugin_install" src="hooks/add-swift-support.js" />
+        <header-file src="src/ios/Bridging-Header.h" />
+        <source-file src="src/ios/AlipayPlugin.swift"/>
+      -->
+        <framework src="SystemConfiguration.framework" />
+        <framework src="Security.framework" />
+        <framework src="libs/AlipaySDK.framework" custom="true" />
+        <resource-file src="libs/AlipaySDK.bundle" />
+    </platform>
+    <platform name="android">
+        <config-file target="config.xml" parent="/*">
+            <feature name="AlipayPlugin">
+                <param name="android-package" value="com.czjcd.cordova.plugins.alipay.AlipayPlugin"/>
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+		<!--配置activity-->
+		<config-file target="AndroidManifest.xml" parent="/manifest/application">
+			<activity
+				android:name="com.alipay.sdk.app.H5PayActivity"
+				android:configChanges="orientation|keyboardHidden|navigation"
+				android:exported="false"
+				android:screenOrientation="behind"
+				android:windowSoftInputMode="adjustResize|stateHidden" >
+			</activity>
+			<activity
+				 android:name="com.alipay.sdk.auth.AuthActivity"
+				 android:configChanges="orientation|keyboardHidden|navigation"
+				 android:exported="false"
+				 android:screenOrientation="behind" >
+			</activity>
+        </config-file>
+
+		<!--添加权限-->
+		<config-file target="AndroidManifest.xml" parent="/*">
+      <uses-permission android:name="android.permission.INTERNET" />
+			<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+			<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+			<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+			<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+      </config-file>
+        <source-file src="src/android/AlipayPlugin.java" target-dir="src/com/sinofool/cordova/plugins/alipay/" />
+        <source-file src="libs/alipaysdk.jar" target-dir="libs/" />
+        <source-file src="libs/alipaysecsdk.jar" target-dir="libs/" />
+        <source-file src="libs/alipayutdid.jar" target-dir="libs/" />
+    </platform>
+</plugin>
